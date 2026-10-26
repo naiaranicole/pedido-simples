@@ -99,7 +99,8 @@ function Entrada() {
           <p className="mt-1 text-muted-foreground">Organize seus produtos e pedidos de forma simples.</p>
         </div>
         <form onSubmit={entrar} noValidate className="cartao space-y-4">
-          {saiu && !erro && <Aviso tipo="sucesso">Sessão encerrada com sucesso.</Aviso>}
+          {saiu && !erro && !aviso && <Aviso tipo="sucesso">Sessão encerrada com sucesso.</Aviso>}
+          {aviso && !erro && <Aviso tipo="sucesso">{aviso}</Aviso>}
           {erro && <Aviso tipo="erro">{erro}</Aviso>}
           <div>
             <label htmlFor="email" className="rotulo">E-mail</label>
@@ -108,12 +109,29 @@ function Entrada() {
           </div>
           <div>
             <label htmlFor="senha" className="rotulo">Senha</label>
-            <input id="senha" type="password" autoComplete="current-password" className="campo"
+            <input id="senha" type="password"
+              autoComplete={modo === "cadastrar" ? "new-password" : "current-password"} className="campo"
               value={senha} onChange={(e) => setSenha(e.target.value)} maxLength={128} />
           </div>
+          {modo === "cadastrar" && (
+            <div>
+              <label htmlFor="senha2" className="rotulo">Repita a senha</label>
+              <input id="senha2" type="password" autoComplete="new-password" className="campo"
+                value={senha2} onChange={(e) => setSenha2(e.target.value)} maxLength={128} />
+            </div>
+          )}
           <button type="submit" disabled={enviando} className={`${botao.primario} w-full`}>
-            {enviando ? "Entrando..." : "Entrar"}
+            {enviando
+              ? (modo === "cadastrar" ? "Criando conta..." : "Entrando...")
+              : (modo === "cadastrar" ? "Criar conta" : "Entrar")}
           </button>
+          <p className="text-center text-sm text-muted-foreground">
+            {modo === "entrar" ? "Ainda não tem conta?" : "Já tem conta?"}{" "}
+            <button type="button" className="font-medium underline underline-offset-2"
+              onClick={() => trocarModo(modo === "entrar" ? "cadastrar" : "entrar")}>
+              {modo === "entrar" ? "Criar conta" : "Entrar"}
+            </button>
+          </p>
         </form>
       </div>
     </main>
