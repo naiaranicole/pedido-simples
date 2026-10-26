@@ -67,9 +67,13 @@ function Entrada() {
       const { error } = await supabase.auth.signUp({ email: email.trim(), password: senha });
       setEnviando(false);
       if (error) {
-        setErro(error.status === 429
-          ? "Muitas tentativas. Aguarde alguns minutos e tente novamente."
-          : "Não foi possível criar a conta. Verifique o e-mail informado.");
+        setErro(
+          error.status === 429
+            ? "Muitas tentativas. Aguarde alguns minutos e tente novamente."
+            : error.code === "weak_password"
+              ? "Essa senha é fraca ou já vazou na internet. Escolha uma senha mais forte e diferente."
+              : "Não foi possível criar a conta. Verifique o e-mail informado."
+        );
         return;
       }
       trocarModo("entrar");
