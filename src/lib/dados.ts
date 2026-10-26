@@ -28,7 +28,7 @@ export type Pedido = {
 const SELECT_PEDIDO =
   "id_pedido, data_pedido, status, valor_total, itens_pedido(id_item, quantidade, preco_unitario, subtotal, produtos(nome))";
 
-export const pedidosQuery = (f: { dia?: string; status?: string; inicio?: string; fim?: string }) =>
+export const pedidosQuery = (f: { dia?: string | undefined; status?: string | undefined; inicio?: string | undefined; fim?: string | undefined }) =>
   queryOptions({
     queryKey: ["pedidos", f.dia ?? "", f.status ?? ""],
     queryFn: async () => {

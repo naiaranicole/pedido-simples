@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Aviso, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({ saiu: s.saiu ? 1 : undefined }),
+  validateSearch: (s: Record<string, unknown>): { saiu?: 1 | undefined } => ({ saiu: s["saiu"] ? 1 : undefined }),
   head: () => ({
     meta: [
       { title: "Entrar — Sistema de Pedidos" },

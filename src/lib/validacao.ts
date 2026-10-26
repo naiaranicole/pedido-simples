@@ -59,6 +59,6 @@ const ERROS_PEDIDO: Record<string, string> = {
 };
 
 export function mensagemErroPedido(msg: string | undefined): string {
-  for (const k of Object.keys(ERROS_PEDIDO)) if (msg?.includes(k)) return ERROS_PEDIDO[k];
+  for (const k of Object.keys(ERROS_PEDIDO)) if (msg?.includes(k)) return ERROS_PEDIDO[k] ?? "";
   return "Não foi possível salvar. Tente novamente.";
 }

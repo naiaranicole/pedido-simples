@@ -5,12 +5,12 @@ import { pedidosQuery } from "@/lib/dados";
 import { formatarData, formatarMoeda, intervaloDoDia, numeroPedido, STATUS_ROTULO } from "@/lib/formato";
 import { Aviso, Pagina, botao } from "@/components/ui-app";
 
-type Busca = { dia?: string; status?: string };
+type Busca = { dia?: string | undefined; status?: string | undefined };
 
 export const Route = createFileRoute("/_authenticated/pedidos/")({
   validateSearch: (s: Record<string, unknown>): Busca => ({
-    dia: typeof s.dia === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.dia) ? s.dia : undefined,
-    status: typeof s.status === "string" && s.status in STATUS_ROTULO ? s.status : undefined,
+    dia: typeof s["dia"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s["dia"]) ? s["dia"] : undefined,
+    status: typeof s["status"] === "string" && s["status"] in STATUS_ROTULO ? s["status"] : undefined,
   }),
   loaderDeps: ({ search }) => search,
   head: () => ({ meta: [{ title: "Pedidos — Sistema de Pedidos" }] }),

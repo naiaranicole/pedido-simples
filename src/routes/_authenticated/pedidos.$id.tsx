@@ -5,7 +5,7 @@ import { formatarData, formatarHora, formatarMoeda, numeroPedido, STATUS_ROTULO 
 import { Aviso, Pagina, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/pedidos/$id")({
-  validateSearch: (s: Record<string, unknown>) => ({ novo: s.novo ? 1 : undefined }),
+  validateSearch: (s: Record<string, unknown>): { novo?: 1 | undefined } => ({ novo: s["novo"] ? 1 : undefined }),
   head: () => ({ meta: [{ title: "Pedido — Sistema de Pedidos" }] }),
   loader: ({ context, params }) => context.queryClient.ensureQueryData(pedidoQuery(Number(params.id) || 0)),
   component: DetalhePedido,
