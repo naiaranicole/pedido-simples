@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Order creation + stock decrease runs only through the `registrar_pedido` SQL function, so it is one atomic transaction; never write orders from the client directly.
+- Money is computed in integer cents on the client and numeric(…,2) in the database to avoid rounding errors.
+- Public signup is disabled; accounts are created by the owner (Users → Add user).
+- The Flask version of this project is delivered separately as a ZIP; this web app is the TanStack + Lovable Cloud alternative.
