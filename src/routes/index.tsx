@@ -62,7 +62,6 @@ function Entrada() {
     <main className="grid min-h-screen place-items-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
-          <div aria-hidden className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-lg bg-primary text-2xl font-bold text-primary-foreground">P</div>
           <h1 className="text-3xl font-bold">Sistema de Pedidos</h1>
           <p className="mt-1 text-muted-foreground">Organize seus produtos e pedidos de forma simples.</p>
         </div>
