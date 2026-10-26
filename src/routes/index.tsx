@@ -19,9 +19,12 @@ export const Route = createFileRoute("/")({
 function Entrada() {
   const { saiu } = Route.useSearch();
   const navigate = useNavigate();
+  const [modo, setModo] = useState<"entrar" | "cadastrar">("entrar");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [senha2, setSenha2] = useState("");
   const [erro, setErro] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [falhas, setFalhas] = useState(0);
   const [bloqueadoAte, setBloqueadoAte] = useState(0);
@@ -32,15 +35,46 @@ function Entrada() {
     });
   }, [navigate]);
 
+  function trocarModo(novo: "entrar" | "cadastrar") {
+    setModo(novo);
+    setErro(null);
+    setAviso(null);
+    setSenha2("");
+  }
+
   async function entrar(e: FormEvent) {
     e.preventDefault();
     setErro(null);
+    setAviso(null);
     if (Date.now() < bloqueadoAte) {
       setErro("Muitas tentativas. Aguarde 30 segundos e tente novamente.");
       return;
     }
     if (!email.trim() || !senha) {
       setErro("Preencha todos os campos.");
+      return;
+    }
+    if (modo === "cadastrar") {
+      if (senha.length < 6) {
+        setErro("A senha precisa ter pelo menos 6 caracteres.");
+        return;
+      }
+      if (senha !== senha2) {
+        setErro("As senhas não coincidem.");
+        return;
+      }
+      setEnviando(true);
+      const { error } = await supabase.auth.signUp({ email: email.trim(), password: senha });
+      setEnviando(false);
+      if (error) {
+        setErro(error.status === 429
+          ? "Muitas tentativas. Aguarde alguns minutos e tente novamente."
+          : "Não foi possível criar a conta. Verifique o e-mail informado.");
+        return;
+      }
+      setAviso("Conta criada! Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.");
+      trocarModo("entrar");
+      setAviso("Conta criada! Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.");
       return;
     }
     setEnviando(true);
