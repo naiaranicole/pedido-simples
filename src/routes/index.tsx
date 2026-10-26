@@ -48,6 +48,7 @@ function Entrada() {
   async function entrar(e: FormEvent) {
     e.preventDefault();
     setErro(null);
+    setNaoConfirmado(false);
     setAviso(null);
     if (Date.now() < bloqueadoAte) {
       setErro("Muitas tentativas. Aguarde 30 segundos e tente novamente.");
@@ -67,7 +68,11 @@ function Entrada() {
         return;
       }
       setEnviando(true);
-      const { error } = await supabase.auth.signUp({ email: email.trim(), password: senha });
+      const { error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password: senha,
+        options: { emailRedirectTo: window.location.origin },
+      });
       setEnviando(false);
       if (error) {
         setErro(
