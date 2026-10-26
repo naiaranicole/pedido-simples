@@ -30,7 +30,7 @@ export function Aviso({ tipo, children }: { tipo: Tipo; children: ReactNode }) {
   );
 }
 
-export function ErroCampo({ id, msg }: { id: string; msg?: string }) {
+export function ErroCampo({ id, msg }: { id: string; msg?: string | undefined }) {
   if (!msg) return null;
   return (
     <p id={id} className="mt-1 font-bold text-destructive">
