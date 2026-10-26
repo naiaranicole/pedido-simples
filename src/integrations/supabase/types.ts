@@ -14,16 +14,135 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      itens_pedido: {
+        Row: {
+          id_item: number
+          id_pedido: number
+          id_produto: number
+          preco_unitario: number
+          quantidade: number
+          subtotal: number
+        }
+        Insert: {
+          id_item?: never
+          id_pedido: number
+          id_produto: number
+          preco_unitario: number
+          quantidade: number
+          subtotal: number
+        }
+        Update: {
+          id_item?: never
+          id_pedido?: number
+          id_produto?: number
+          preco_unitario?: number
+          quantidade?: number
+          subtotal?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itens_pedido_id_pedido_fkey"
+            columns: ["id_pedido"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id_pedido"]
+          },
+          {
+            foreignKeyName: "itens_pedido_id_produto_fkey"
+            columns: ["id_produto"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id_produto"]
+          },
+        ]
+      }
+      pedidos: {
+        Row: {
+          data_pedido: string
+          id_pedido: number
+          id_usuario: string | null
+          status: Database["public"]["Enums"]["status_pedido"]
+          valor_total: number
+        }
+        Insert: {
+          data_pedido?: string
+          id_pedido?: number
+          id_usuario?: string | null
+          status?: Database["public"]["Enums"]["status_pedido"]
+          valor_total: number
+        }
+        Update: {
+          data_pedido?: string
+          id_pedido?: number
+          id_usuario?: string | null
+          status?: Database["public"]["Enums"]["status_pedido"]
+          valor_total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_id_usuario_fkey"
+            columns: ["id_usuario"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id_usuario"]
+          },
+        ]
+      }
+      produtos: {
+        Row: {
+          ativo: boolean
+          estoque: number
+          id_produto: number
+          nome: string
+          preco: number
+        }
+        Insert: {
+          ativo?: boolean
+          estoque: number
+          id_produto?: never
+          nome: string
+          preco: number
+        }
+        Update: {
+          ativo?: boolean
+          estoque?: number
+          id_produto?: never
+          nome?: string
+          preco?: number
+        }
+        Relationships: []
+      }
+      usuarios: {
+        Row: {
+          ativo: boolean
+          email: string
+          id_usuario: string
+          nome: string
+        }
+        Insert: {
+          ativo?: boolean
+          email: string
+          id_usuario: string
+          nome: string
+        }
+        Update: {
+          ativo?: boolean
+          email?: string
+          id_usuario?: string
+          nome?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      registrar_pedido: { Args: { itens: Json }; Returns: number }
+      usuario_ativo: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      status_pedido: "pendente" | "concluido" | "cancelado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +269,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      status_pedido: ["pendente", "concluido", "cancelado"],
+    },
   },
 } as const
