@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { produtosQuery, type Produto } from "@/lib/dados";
 import { validarProduto, type ErrosProduto } from "@/lib/validacao";
@@ -53,7 +53,7 @@ function Produtos() {
 
   const campo = (k: keyof typeof form) => ({
     value: form[k],
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value }),
+    onChange: (e: ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value }),
     "aria-invalid": erros[k] ? true : undefined,
     "aria-describedby": erros[k] ? `erro-${k}` : `dica-${k}`,
   });
