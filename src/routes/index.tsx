@@ -72,7 +72,6 @@ function Entrada() {
           : "Não foi possível criar a conta. Verifique o e-mail informado.");
         return;
       }
-      setAviso("Conta criada! Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.");
       trocarModo("entrar");
       setAviso("Conta criada! Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.");
       return;
