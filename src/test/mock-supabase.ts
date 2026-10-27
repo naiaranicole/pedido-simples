@@ -45,12 +45,23 @@ export function prepararAuth(autenticado: boolean) {
 
 type Resultado = { data?: unknown; error?: unknown };
 
+export type TabelaMock = {
+  select: ReturnType<typeof vi.fn>;
+  order: ReturnType<typeof vi.fn>;
+  limit: ReturnType<typeof vi.fn>;
+  eq: ReturnType<typeof vi.fn>;
+  maybeSingle: ReturnType<typeof vi.fn>;
+  insert: ReturnType<typeof vi.fn>;
+  update: ReturnType<typeof vi.fn>;
+  then: (resolve: (v: Resultado) => unknown) => unknown;
+};
+
 /**
  * Simula o encadeamento supabase.from("tabela").select().order()...:
  * cada método devolve o próprio objeto e, ao ser aguardado (await), resolve o resultado.
  */
-export function tabela(resultado: Resultado) {
-  const q: Record<string, unknown> = {
+export function tabela(resultado: Resultado): TabelaMock {
+  const q: TabelaMock = {
     select: vi.fn(() => q),
     order: vi.fn(() => q),
     limit: vi.fn(() => q),
@@ -58,8 +69,7 @@ export function tabela(resultado: Resultado) {
     maybeSingle: vi.fn(() => q),
     insert: vi.fn(() => Promise.resolve({ data: null, error: resultado.error ?? null })),
     update: vi.fn(() => q),
-    then: (resolve: (v: Resultado) => unknown) =>
-      resolve({ data: resultado.data ?? [], error: resultado.error ?? null }),
+    then: (resolve) => resolve({ data: resultado.data ?? [], error: resultado.error ?? null }),
   };
-  return q as Record<string, ReturnType<typeof vi.fn>> & { then: unknown };
+  return q;
 }
