@@ -2,7 +2,7 @@ import "./mock-supabase";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, screen } from "@testing-library/react";
 
-import { mocks, prepararAuth } from "./mock-supabase";
+import { COM_USUARIO, mocks, prepararAuth, tabela } from "./mock-supabase";
 import { renderNaRota } from "./render";
 
 describe("tela de login e cadastro (integração, banco simulado)", () => {
@@ -35,6 +35,9 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
     mocks.signInWithPassword.mockResolvedValue({ data: { user: { id: "u1" } }, error: null });
     const router = await renderNaRota("/");
     preencher("lojista@teste.com", "123456");
+    // Após o login, a verificação da sessão passa a encontrar o usuário autenticado.
+    mocks.getUser.mockResolvedValue(COM_USUARIO);
+    mocks.from.mockReturnValue(tabela({ data: [] }));
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     await screen.findByRole("button", { name: "Entrando..." });
     await vi.waitFor(() => expect(router.state.location.pathname).toBe("/inicio"));
