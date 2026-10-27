@@ -3,8 +3,9 @@ import { vi } from "vitest";
 /**
  * Mocks do cliente do banco de dados para os testes de integração.
  * Nenhuma chamada sai para o banco real: tudo é respondido pelos vi.fn abaixo.
+ * Este arquivo precisa ser importado ANTES de qualquer módulo do app no teste.
  */
-export const mocks = vi.hoisted(() => ({
+export const mocks = {
   getUser: vi.fn(),
   signInWithPassword: vi.fn(),
   signUp: vi.fn(),
@@ -13,7 +14,7 @@ export const mocks = vi.hoisted(() => ({
   onAuthStateChange: vi.fn(),
   from: vi.fn(),
   rpc: vi.fn(),
-}));
+};
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
