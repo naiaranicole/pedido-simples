@@ -29,8 +29,8 @@ describe("registro de pedido (integração, banco simulado)", () => {
     await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "2");
-    expect(await screen.findByText("Total do pedido:")).toBeInTheDocument();
-    expect(screen.getByText("R$ 30,00")).toBeInTheDocument();
+    const linhaTotal = (await screen.findByText("Total do pedido:")).closest("p");
+    expect(linhaTotal).toHaveTextContent("R$ 30,00");
   });
 
   it("registra o pedido pela função do banco, que dá baixa no estoque em uma transação", async () => {
