@@ -21,7 +21,7 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
   });
 
   it("lista os produtos com preço formatado e estoque", async () => {
-    renderNaRota("/produtos");
+    await renderNaRota("/produtos");
     expect(await screen.findByText("Caderno")).toBeInTheDocument();
     expect(screen.getByText(/R\$ 15,00/)).toBeInTheDocument();
     expect(screen.getByText(/Estoque: 20 unidades/)).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
   });
 
   it("bloqueia cadastro inválido sem gravar no banco", async () => {
-    renderNaRota("/produtos");
+    await renderNaRota("/produtos");
     fireEvent.click(await screen.findByRole("button", { name: "Salvar produto" }));
     expect(await screen.findByText("Corrija os campos marcados abaixo.")).toBeInTheDocument();
     expect(screen.getByText("Preencha o nome do produto.")).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
   });
 
   it("cadastra um produto válido com preço e estoque convertidos", async () => {
-    renderNaRota("/produtos");
+    await renderNaRota("/produtos");
     fireEvent.change(await screen.findByLabelText("Nome do produto"), { target: { value: "Régua" } });
     fireEvent.change(screen.getByLabelText("Preço (R$)"), { target: { value: "5,50" } });
     fireEvent.change(screen.getByLabelText("Estoque"), { target: { value: "10" } });
@@ -47,7 +47,7 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
   });
 
   it("rejeita preço zero sem gravar no banco", async () => {
-    renderNaRota("/produtos");
+    await renderNaRota("/produtos");
     fireEvent.change(await screen.findByLabelText("Nome do produto"), { target: { value: "Régua" } });
     fireEvent.change(screen.getByLabelText("Preço (R$)"), { target: { value: "0" } });
     fireEvent.change(screen.getByLabelText("Estoque"), { target: { value: "10" } });
@@ -57,7 +57,7 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
   });
 
   it("desativa um produto existente", async () => {
-    renderNaRota("/produtos");
+    await renderNaRota("/produtos");
     fireEvent.click(await screen.findByRole("button", { name: "Desativar Caderno" }));
     expect(await screen.findByText('"Caderno" foi desativado.')).toBeInTheDocument();
     expect(q.update).toHaveBeenCalledWith({ ativo: false });

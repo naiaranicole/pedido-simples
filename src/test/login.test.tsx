@@ -17,7 +17,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
   }
 
   it("exige o preenchimento de e-mail e senha", async () => {
-    renderNaRota("/");
+    await renderNaRota("/");
     fireEvent.click(await screen.findByRole("button", { name: "Entrar" }));
     expect(await screen.findByText("Preencha todos os campos.")).toBeInTheDocument();
     expect(mocks.signInWithPassword).not.toHaveBeenCalled();
@@ -25,7 +25,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
 
   it("informa quando e-mail ou senha estão incorretos", async () => {
     mocks.signInWithPassword.mockResolvedValue({ data: {}, error: { message: "Invalid login credentials", status: 400 } });
-    renderNaRota("/");
+    await renderNaRota("/");
     preencher("lojista@teste.com", "senhaerrada");
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     expect(await screen.findByText("E-mail ou senha incorretos.")).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
 
   it("entra quando as credenciais estão corretas", async () => {
     mocks.signInWithPassword.mockResolvedValue({ data: { user: { id: "u1" } }, error: null });
-    const router = renderNaRota("/");
+    const router = await renderNaRota("/");
     preencher("lojista@teste.com", "123456");
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     await screen.findByRole("button", { name: "Entrando..." });
@@ -44,7 +44,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
   it("avisa e oferece reenvio quando o e-mail não foi confirmado", async () => {
     mocks.signInWithPassword.mockResolvedValue({ data: {}, error: { code: "email_not_confirmed", message: "Email not confirmed" } });
     mocks.resend.mockResolvedValue({ data: {}, error: null });
-    renderNaRota("/");
+    await renderNaRota("/");
     preencher("lojista@teste.com", "123456");
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
     expect(await screen.findByText(/e-mail ainda não foi confirmado/i)).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
   });
 
   it("permite mostrar e ocultar a senha digitada", async () => {
-    renderNaRota("/");
+    await renderNaRota("/");
     const campo = (await screen.findByLabelText("Senha")) as HTMLInputElement;
     expect(campo.type).toBe("password");
     fireEvent.click(screen.getByRole("button", { name: "Mostrar senha" }));
@@ -66,7 +66,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
   });
 
   it("cadastro exige senha com pelo menos 6 caracteres", async () => {
-    renderNaRota("/");
+    await renderNaRota("/");
     fireEvent.click(await screen.findByRole("button", { name: "Criar conta" }));
     preencher("novo@teste.com", "123");
     fireEvent.change(screen.getByLabelText("Repita a senha"), { target: { value: "123" } });
@@ -76,7 +76,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
   });
 
   it("cadastro exige que as duas senhas sejam iguais", async () => {
-    renderNaRota("/");
+    await renderNaRota("/");
     fireEvent.click(await screen.findByRole("button", { name: "Criar conta" }));
     preencher("novo@teste.com", "123456");
     fireEvent.change(screen.getByLabelText("Repita a senha"), { target: { value: "654321" } });
@@ -87,7 +87,7 @@ describe("tela de login e cadastro (integração, banco simulado)", () => {
 
   it("cadastro com sucesso pede a confirmação do e-mail", async () => {
     mocks.signUp.mockResolvedValue({ data: { user: { id: "u2" } }, error: null });
-    renderNaRota("/");
+    await renderNaRota("/");
     fireEvent.click(await screen.findByRole("button", { name: "Criar conta" }));
     preencher("novo@teste.com", "123456");
     fireEvent.change(screen.getByLabelText("Repita a senha"), { target: { value: "123456" } });

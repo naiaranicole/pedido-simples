@@ -26,7 +26,7 @@ describe("registro de pedido (integração, banco simulado)", () => {
   }
 
   it("calcula o total do item ao vivo (2 × R$ 15,00 = R$ 30,00)", async () => {
-    renderNaRota("/pedidos/novo");
+    await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "2");
     expect(await screen.findByText("Total do pedido:")).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("registro de pedido (integração, banco simulado)", () => {
   });
 
   it("registra o pedido pela função do banco, que dá baixa no estoque em uma transação", async () => {
-    const router = renderNaRota("/pedidos/novo");
+    const router = await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "2");
     fireEvent.click(screen.getByRole("button", { name: "Registrar pedido" }));
@@ -47,7 +47,7 @@ describe("registro de pedido (integração, banco simulado)", () => {
   });
 
   it("soma vários produtos diferentes no mesmo pedido", async () => {
-    renderNaRota("/pedidos/novo");
+    await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "2");
     fireEvent.click(screen.getByRole("button", { name: "+ Adicionar outro produto" }));
@@ -64,7 +64,7 @@ describe("registro de pedido (integração, banco simulado)", () => {
   });
 
   it("impede quantidade maior que o estoque e não chama o banco", async () => {
-    renderNaRota("/pedidos/novo");
+    await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "21");
     fireEvent.click(screen.getByRole("button", { name: "Registrar pedido" }));
@@ -76,7 +76,7 @@ describe("registro de pedido (integração, banco simulado)", () => {
 
   it("traduz o erro de estoque devolvido pelo banco", async () => {
     mocks.rpc.mockResolvedValue({ data: null, error: { message: "ESTOQUE_INSUFICIENTE" } });
-    renderNaRota("/pedidos/novo");
+    await renderNaRota("/pedidos/novo");
     await screen.findByRole("option", { name: /Caderno/ });
     selecionarProdutoEQuantidade("1", "2");
     fireEvent.click(screen.getByRole("button", { name: "Registrar pedido" }));
