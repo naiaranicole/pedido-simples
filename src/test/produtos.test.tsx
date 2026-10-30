@@ -63,4 +63,22 @@ describe("cadastro e listagem de produtos (integração, banco simulado)", () =>
     expect(q.update).toHaveBeenCalledWith({ ativo: false });
     expect(q.eq).toHaveBeenCalledWith("id_produto", 1);
   });
+
+  it("pesquisa por nome durante a digitação, sem diferenciar maiúsculas", async () => {
+    await renderNaRota("/produtos");
+    const busca = await screen.findByLabelText("Pesquisar produto por nome");
+    fireEvent.change(busca, { target: { value: "BORR" } });
+    expect(screen.getByText("Borracha")).toBeInTheDocument();
+    expect(screen.queryByText("Caderno")).not.toBeInTheDocument();
+    expect(screen.getByText("1 produto encontrado")).toBeInTheDocument();
+    expect(q.insert).not.toHaveBeenCalled();
+    expect(q.update).not.toHaveBeenCalled();
+  });
+
+  it("mostra mensagem quando nenhum produto é encontrado", async () => {
+    await renderNaRota("/produtos");
+    fireEvent.change(await screen.findByLabelText("Pesquisar produto por nome"), { target: { value: "xyz" } });
+    expect(screen.getByText('Nenhum produto encontrado para "xyz".')).toBeInTheDocument();
+    expect(screen.queryByText("Caderno")).not.toBeInTheDocument();
+  });
 });
