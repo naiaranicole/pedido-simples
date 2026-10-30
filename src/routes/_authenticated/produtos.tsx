@@ -3,6 +3,7 @@ import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { produtosQuery, type Produto } from "@/lib/dados";
+import { filtrarProdutos } from "@/lib/busca";
 import { validarProduto, type ErrosProduto } from "@/lib/validacao";
 import { formatarMoeda } from "@/lib/formato";
 import { Aviso, ErroCampo, Pagina, botao } from "@/components/ui-app";
@@ -27,6 +28,8 @@ function Produtos() {
   const [erros, setErros] = useState<ErrosProduto>({});
   const [aviso, setAviso] = useState<{ tipo: "sucesso" | "erro"; msg: string } | null>(null);
   const [salvando, setSalvando] = useState(false);
+  const [busca, setBusca] = useState("");
+  const visiveis = filtrarProdutos(produtos, busca);
 
   async function salvar(e: FormEvent) {
     e.preventDefault();
@@ -99,11 +102,23 @@ function Produtos() {
 
       <section aria-labelledby="t-lista">
         <h2 id="t-lista" className="mb-3 text-xl font-bold">Produtos cadastrados ({produtos.length})</h2>
+        {produtos.length > 0 && (
+          <div className="mb-4" role="search">
+            <label htmlFor="busca" className="rotulo">Pesquisar produto por nome</label>
+            <input id="busca" type="search" className="campo" value={busca} maxLength={100}
+              placeholder="Ex.: caneta" onChange={(e) => setBusca(e.target.value)} aria-describedby="busca-resultado" />
+            <p id="busca-resultado" className="mt-1 text-muted-foreground" aria-live="polite">
+              {busca.trim() ? `${visiveis.length} ${visiveis.length === 1 ? "produto encontrado" : "produtos encontrados"}` : ""}
+            </p>
+          </div>
+        )}
         {produtos.length === 0 ? (
           <Aviso tipo="info">Nenhum produto cadastrado ainda.</Aviso>
+        ) : visiveis.length === 0 ? (
+          <Aviso tipo="info">Nenhum produto encontrado para "{busca.trim()}".</Aviso>
         ) : (
           <ul className="divide-y rounded-lg border bg-card">
-            {produtos.map((p) => (
+            {visiveis.map((p) => (
               <li key={p.id_produto} className="flex flex-wrap items-center justify-between gap-3 p-4">
                 <div>
                   <p className="font-bold">{p.nome} {!p.ativo && <span className="ml-1 rounded bg-muted px-2 py-0.5 text-sm text-muted-foreground">Desativado</span>}</p>
