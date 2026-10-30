@@ -6,7 +6,14 @@ import { Aviso, Pagina, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/pedidos/$id")({
   validateSearch: (s: Record<string, unknown>): { novo?: 1 | undefined } => ({ novo: s["novo"] ? 1 : undefined }),
-  head: () => ({ meta: [{ title: "Pedido — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Pedido — Sistema de Pedidos" },
+    { name: "description", content: "Confira os produtos, quantidades e total de um pedido." },
+    { property: "og:title", content: "Pedido — Sistema de Pedidos" },
+    { property: "og:description", content: "Confira os produtos, quantidades e total de um pedido." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   loader: ({ context, params }) => context.queryClient.ensureQueryData(pedidoQuery(Number(params.id) || 0)),
   component: DetalhePedido,
 });
