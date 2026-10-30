@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { ControleTexto } from "@/components/texto-acessivel";
 
 type Tipo = "sucesso" | "erro" | "info";
 const SIMBOLO: Record<Tipo, string> = { sucesso: "✓", erro: "✕", info: "i" };
@@ -61,6 +62,7 @@ export function Cabecalho() {
     <header className="bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-2">
         <Link to="/inicio" className={cn(link, "text-lg")}>Sistema de Pedidos</Link>
+        <ControleTexto />
         <nav aria-label="Menu principal" className="flex flex-wrap gap-1">
           <Link to="/produtos" className={link} activeProps={{ className: "underline underline-offset-4" }}>Produtos</Link>
           <Link to="/pedidos/novo" className={link} activeProps={{ className: "underline underline-offset-4" }}>Novo pedido</Link>
