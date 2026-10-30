@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { ControleTexto } from "@/components/texto-acessivel";
 
 type Tipo = "sucesso" | "erro" | "info";
 const SIMBOLO: Record<Tipo, string> = { sucesso: "✓", erro: "✕", info: "i" };
@@ -40,7 +41,7 @@ export function ErroCampo({ id, msg }: { id: string; msg?: string | undefined })
 }
 
 const botaoBase =
-  "inline-flex min-h-12 min-w-11 items-center justify-center gap-2 rounded-md px-5 text-base font-bold transition-colors disabled:opacity-60";
+  "inline-flex min-h-12 min-w-11 max-w-full items-center justify-center gap-2 rounded-md px-5 text-base font-bold transition-colors disabled:opacity-60";
 export const botao = {
   primario: cn(botaoBase, "bg-primary text-primary-foreground hover:bg-primary/90"),
   secundario: cn(botaoBase, "border-2 border-primary bg-card text-primary hover:bg-primary-soft"),
@@ -61,6 +62,7 @@ export function Cabecalho() {
     <header className="bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-2">
         <Link to="/inicio" className={cn(link, "text-lg")}>Sistema de Pedidos</Link>
+        <ControleTexto />
         <nav aria-label="Menu principal" className="flex flex-wrap gap-1">
           <Link to="/produtos" className={link} activeProps={{ className: "underline underline-offset-4" }}>Produtos</Link>
           <Link to="/pedidos/novo" className={link} activeProps={{ className: "underline underline-offset-4" }}>Novo pedido</Link>
@@ -76,7 +78,7 @@ export function Pagina({ titulo, children }: { titulo: string; children: ReactNo
   return (
     <>
       <Cabecalho />
-      <main className="mx-auto max-w-4xl px-4 py-6">
+      <main className="mx-auto max-w-4xl px-4 py-6 [overflow-wrap:anywhere]">
         <h1 className="mb-5 text-2xl font-bold sm:text-3xl">{titulo}</h1>
         {children}
       </main>

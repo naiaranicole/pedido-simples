@@ -8,7 +8,14 @@ import { formatarMoeda } from "@/lib/formato";
 import { Aviso, ErroCampo, Pagina, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/produtos")({
-  head: () => ({ meta: [{ title: "Produtos — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Produtos — Sistema de Pedidos" },
+    { name: "description", content: "Cadastre produtos e consulte preços e estoque." },
+    { property: "og:title", content: "Produtos — Sistema de Pedidos" },
+    { property: "og:description", content: "Cadastre produtos e consulte preços e estoque." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(produtosQuery()),
   component: Produtos,
 });

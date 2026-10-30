@@ -8,7 +8,14 @@ import { deCentavos, formatarMoeda, paraCentavos } from "@/lib/formato";
 import { Aviso, ErroCampo, Pagina, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/pedidos/novo")({
-  head: () => ({ meta: [{ title: "Novo pedido — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Novo pedido — Sistema de Pedidos" },
+    { name: "description", content: "Registre uma venda com cálculo de total e controle de estoque." },
+    { property: "og:title", content: "Novo pedido — Sistema de Pedidos" },
+    { property: "og:description", content: "Registre uma venda com cálculo de total e controle de estoque." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(produtosQuery()),
   component: NovoPedido,
 });
@@ -115,7 +122,7 @@ function NovoPedido() {
           <ErroCampo id="erro-qtd" msg={erroQtd} />
         </div>
 
-        <dl className="grid grid-cols-2 gap-3 rounded-md bg-primary-soft p-4 sm:grid-cols-3" aria-live="polite">
+        <dl className="grid grid-cols-1 gap-3 rounded-md bg-primary-soft p-4 sm:grid-cols-3" aria-live="polite">
           <div><dt className="text-muted-foreground">Preço unitário</dt><dd className="text-lg font-bold">{sel ? formatarMoeda(Number(sel.preco)) : "—"}</dd></div>
           <div><dt className="text-muted-foreground">Estoque disponível</dt><dd className="text-lg font-bold">{sel ? `${disponivel} un.` : "—"}</dd></div>
           <div><dt className="text-muted-foreground">Total deste item</dt><dd className="text-lg font-bold">{sel ? formatarMoeda(deCentavos(totalItemAtual)) : "—"}</dd></div>
@@ -128,9 +135,9 @@ function NovoPedido() {
             <h2 id="t-itens" className="mb-2 text-lg font-bold">Itens do pedido</h2>
             <ul className="divide-y rounded-md border">
               {itens.map((i) => (
-                <li key={i.id_produto} className="flex items-center justify-between gap-3 p-3">
+                <li key={i.id_produto} className="flex flex-wrap items-center justify-between gap-3 p-3">
                   <span>{i.quantidade} × {i.nome} <span className="text-muted-foreground">({formatarMoeda(deCentavos(i.precoCentavos))})</span></span>
-                  <span className="flex items-center gap-2">
+                  <span className="flex flex-wrap items-center gap-2">
                     <strong>{formatarMoeda(deCentavos(i.precoCentavos * i.quantidade))}</strong>
                     <button type="button" className={botao.discreto} aria-label={`Remover ${i.nome}`}
                       onClick={() => setItens(itens.filter((x) => x !== i))}>Remover</button>

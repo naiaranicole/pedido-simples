@@ -6,7 +6,14 @@ import { Aviso, Pagina, botao } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/pedidos/$id")({
   validateSearch: (s: Record<string, unknown>): { novo?: 1 | undefined } => ({ novo: s["novo"] ? 1 : undefined }),
-  head: () => ({ meta: [{ title: "Pedido — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Pedido — Sistema de Pedidos" },
+    { name: "description", content: "Confira os produtos, quantidades e total de um pedido." },
+    { property: "og:title", content: "Pedido — Sistema de Pedidos" },
+    { property: "og:description", content: "Confira os produtos, quantidades e total de um pedido." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   loader: ({ context, params }) => context.queryClient.ensureQueryData(pedidoQuery(Number(params.id) || 0)),
   component: DetalhePedido,
 });
@@ -34,7 +41,8 @@ function DetalhePedido() {
           <div><dt className="text-muted-foreground">Status</dt><dd className="font-bold">{STATUS_ROTULO[p.status]}</dd></div>
           <div><dt className="text-muted-foreground">Valor total</dt><dd className="text-xl font-bold">{formatarMoeda(Number(p.valor_total))}</dd></div>
         </dl>
-        <table className="mt-5 w-full text-left">
+        <div className="mt-5 overflow-x-auto" role="region" aria-label="Produtos do pedido" tabIndex={0}>
+        <table className="w-full min-w-80 text-left">
           <caption className="sr-only">Produtos do pedido</caption>
           <thead><tr className="border-b"><th className="py-2">Produto</th><th className="py-2 text-right">Qtd.</th><th className="hidden py-2 text-right sm:table-cell">Preço unit.</th><th className="py-2 text-right">Subtotal</th></tr></thead>
           <tbody>
@@ -48,6 +56,7 @@ function DetalhePedido() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       <div className="mt-5 flex flex-wrap gap-3">
         <Link to="/pedidos/novo" className={botao.primario}>Novo pedido</Link>

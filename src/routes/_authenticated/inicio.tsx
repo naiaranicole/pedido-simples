@@ -2,7 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pagina } from "@/components/ui-app";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
-  head: () => ({ meta: [{ title: "Início — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Início — Sistema de Pedidos" },
+    { name: "description", content: "Acesse produtos, estoque e pedidos do seu comércio." },
+    { property: "og:title", content: "Início — Sistema de Pedidos" },
+    { property: "og:description", content: "Acesse produtos, estoque e pedidos do seu comércio." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Inicio,
 });
 

@@ -14,3 +14,4 @@
 - Money is computed in integer cents on the client and numeric(…,2) in the database to avoid rounding errors.
 - Public signup is enabled: anyone can create an account from the login screen ("Criar conta" mode), with email confirmation required.
 - The Flask version of this project is delivered separately as a ZIP; this web app is the TanStack + Lovable Cloud alternative.
+- Reading-size preferences use a root React provider and a root rem-based CSS class, restored after hydration from browser storage; this preserves page state and scales typography across all screens without changing business data.

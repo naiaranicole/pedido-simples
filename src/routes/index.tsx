@@ -12,6 +12,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Organize seus produtos e pedidos de forma simples." },
       { property: "og:title", content: "Sistema de Pedidos" },
       { property: "og:description", content: "Organize seus produtos e pedidos de forma simples." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Entrada,

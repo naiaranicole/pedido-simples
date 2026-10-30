@@ -13,7 +13,14 @@ export const Route = createFileRoute("/_authenticated/pedidos/")({
     status: typeof s["status"] === "string" && s["status"] in STATUS_ROTULO ? s["status"] : undefined,
   }),
   loaderDeps: ({ search }) => search,
-  head: () => ({ meta: [{ title: "Pedidos — Sistema de Pedidos" }] }),
+  head: () => ({ meta: [
+    { title: "Pedidos — Sistema de Pedidos" },
+    { name: "description", content: "Consulte pedidos registrados por data e status." },
+    { property: "og:title", content: "Pedidos — Sistema de Pedidos" },
+    { property: "og:description", content: "Consulte pedidos registrados por data e status." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   loader: ({ context, deps }) => context.queryClient.ensureQueryData(pedidosQuery(filtro(deps))),
   component: ListaPedidos,
 });

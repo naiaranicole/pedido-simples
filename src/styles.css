@@ -67,6 +67,7 @@
 @layer base {
   * { border-color: var(--color-border); }
   html { font-size: 112.5%; }
+  html.texto-aumentado { font-size: 140.625%; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
